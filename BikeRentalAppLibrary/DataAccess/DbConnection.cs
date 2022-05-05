@@ -3,8 +3,8 @@ using MongoDB.Driver;
 
 namespace BikeRentalAppLibrary.DataAccess;
 
-public class DbConnection
- {
+public class DbConnection : IDbConnection
+{
    private readonly IConfiguration _config;
    private readonly IMongoDatabase _db;
    private string _connectionId = "MongoDB";
@@ -32,4 +32,4 @@ public class DbConnection
       TypeCollection = _db.GetCollection<TypeModel>(TypeCollectionName);
       UserCollection = _db.GetCollection<UserModel>(UserCollectionName);
    }
- }
+}
