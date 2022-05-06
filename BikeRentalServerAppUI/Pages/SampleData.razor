@@ -1,0 +1,116 @@
+﻿@page "/SampleData"
+@inject ITypeData typeData
+@inject IStationData stationData
+
+<h3>SampleData</h3>
+
+@if (typesCreated)
+{
+    <h4>Types have been created</h4>
+}
+else
+{
+    <button class="btn btn-primary" @onclick="CreateTypes">Create Types</button>
+}
+
+@if (stationsCreated)
+{
+    <h4>Stations have been created</h4>
+}
+else
+{
+    <button class="btn btn-primary" @onclick="CreateStations">Create Stations</button>
+}
+
+
+@code {
+    private bool typesCreated = false;
+    private bool stationsCreated = false;
+    private async Task CreateTypes()
+    {
+        var types = await typeData.GetAllTypes();
+
+        if(types?.Count > 0)
+        {
+            return;
+        }
+        else
+        {
+            TypeModel type = new()
+                {
+                    Name = "MTB",
+                    Description = "Bike dedicated to mountain biking.",
+                    Price = 10
+                };
+            await typeData.CreateType(type);
+
+            type = new()
+                {
+                    Name = "City Bike",
+                    Description = "Bike dedicated to city tours.",
+                    Price = 10
+                };
+            await typeData.CreateType(type);
+
+            type = new()
+                {
+                    Name = "Children's bike",
+                    Description = "Bike for children.",
+                    Price = 10
+                };
+            await typeData.CreateType(type);
+
+            typesCreated = true;
+        }
+    }
+
+    private async Task CreateStations()
+    {
+        var stations = await stationData.GetAllStations();
+
+        if(stations?.Count > 0)
+        {
+            return;
+        }
+        else
+        {
+            StationModel station = new()
+                {
+                    Name = "Station 1",
+                    City = "Chorzów",
+                    Street = "Jasna",
+                    Number = 23,
+                    PostalCode = "41-500",
+                    Longitude = 0,
+                    Latitude = 0
+                };
+            await stationData.CreateStation(station);
+
+            station = new()
+                {
+                    Name = "Station 2",
+                    City = "Katowice",
+                    Street = "Jasna",
+                    Number = 23,
+                    PostalCode = "41-500",
+                    Longitude = 0,
+                    Latitude = 0
+                };
+            await stationData.CreateStation(station);
+
+            station = new()
+                {
+                    Name = "Station 3",
+                    City = "Sosnowiec",
+                    Street = "Jasna",
+                    Number = 23,
+                    PostalCode = "41-500",
+                    Longitude = 0,
+                    Latitude = 0
+                };
+            await stationData.CreateStation(station);
+
+            stationsCreated = true;
+        }
+    }
+}

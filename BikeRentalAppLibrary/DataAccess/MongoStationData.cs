@@ -21,7 +21,7 @@ public class MongoStationData : IStationData
 			var results = await _stations.FindAsync(_ => true);
 			output = results.ToList();
 
-			_cache.Set(CacheName, output, TimeSpan.FromDays(1);
+			_cache.Set(CacheName, output, TimeSpan.FromDays(1));
 		}
 
 		return output;
