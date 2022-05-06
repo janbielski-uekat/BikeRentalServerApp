@@ -1,6 +1,8 @@
 ﻿@page "/SampleData"
 @inject ITypeData typeData
 @inject IStationData stationData
+@inject IUserData userData
+@inject IBookingData bookingData
 
 <h3>SampleData</h3>
 
@@ -22,10 +24,44 @@ else
     <button class="btn btn-primary" @onclick="CreateStations">Create Stations</button>
 }
 
+<button class="btn btn-danger" @onclick="GenerateSampleData">Generate Sample Data</button>
 
 @code {
     private bool typesCreated = false;
     private bool stationsCreated = false;
+
+    private async Task GenerateSampleData()
+    {
+        UserModel user = new()
+            {
+                FirstName = "Jan",
+                LastName = "Bielski",
+                EmailAddress = "jan@test.com",
+                ObjectIdentifier = "abc-123"
+            };
+        await userData.CreateUser(user);
+
+        var foundUser = await userData.GetUserFromAuthentication("abc-123");
+        var types = await typeData.GetAllTypes();
+        var stations = await stationData.GetAllStations();
+
+        BookingModel booking = new()
+            {
+                Renter = new BasicUserModel(foundUser),
+                DatePlaced = DateTime.UtcNow,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow,
+                StartStationId = stations[0].Id,
+                EndStationId = stations[0].Id,
+                Bikes = new Dictionary<string, int>
+                {
+                    {types[0].Name, 1 },
+                    {types[1].Name, 1 }
+                }
+            };
+        await bookingData.CreateBooking(booking);
+    }
+
     private async Task CreateTypes()
     {
         var types = await typeData.GetAllTypes();

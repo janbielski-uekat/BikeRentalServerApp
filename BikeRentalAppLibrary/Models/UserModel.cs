@@ -9,5 +9,5 @@ public class UserModel
 	public string FirstName { get; set; }
 	public string LastName { get; set; }
 	public string EmailAddress { get; set; }
-	public List<BasicBookingModel> Bookings { get; set; }
+	public List<BasicBookingModel> Bookings { get; set; } = new();
 }
