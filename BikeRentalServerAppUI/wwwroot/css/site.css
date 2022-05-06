@@ -4,6 +4,20 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+body {
+    background: url(../images/sitebackground.jpg) no-repeat center center fixed;
+    background-color: black;
+    background-size: cover;
+    height: 100%;
+}
+.header{
+    align-content: center;
+}
+
+.landing-title, .landing-subtitle{
+    align-content: center;
+    color: azure;
+}
 h1:focus {
     outline: none;
 }
