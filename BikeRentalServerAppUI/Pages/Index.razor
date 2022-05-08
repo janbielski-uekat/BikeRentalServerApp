@@ -6,7 +6,73 @@
 
 <div class="container-fluid wrapper">
     <div class="main-content">
-        You have been logged in.
+        @if(loggedInUser is null)
+        {
+            <p>Loadning...</p>
+        }
+        else
+        {
+         <p>You have been logged in as @loggedInUser.FirstName @loggedInUser.LastName.</p>   
+        }        
     </div>    
 </div>
 
+@code{
+    private UserModel loggedInUser;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadAndVerifyUser();
+        loggedInUser = await authProvider.GetUserFromAuth(userData);
+    }
+
+    private async Task LoadAndVerifyUser()
+     {
+         var authState = await authProvider.GetAuthenticationStateAsync();
+         string objectId = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("objectidentifier"))?.Value;
+         if (string.IsNullOrWhiteSpace(objectId) == false)
+         {
+             loggedInUser = await userData.GetUserFromAuthentication(objectId) ?? new();
+             string firstName = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value;
+             string lastName = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value;
+             string displayName = authState.User.Claims.FirstOrDefault(c => c.Type.Equals("name"))?.Value;
+             string email = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value;
+             bool isDirty = false;
+             if (objectId.Equals(loggedInUser.ObjectIdentifier) == false)
+             {
+                 isDirty = true;
+                 loggedInUser.ObjectIdentifier = objectId;
+             }
+
+             if (firstName.Equals(loggedInUser.FirstName) == false)
+             {
+                 isDirty = true;
+                 loggedInUser.FirstName = firstName;
+             }
+
+             if (lastName.Equals(loggedInUser.LastName) == false)
+             {
+                 isDirty = true;
+                 loggedInUser.LastName = lastName;
+             }
+
+             if (email.Equals(loggedInUser.EmailAddress) == false)
+             {
+                 isDirty = true;
+                 loggedInUser.EmailAddress = email;
+             }
+
+             if (isDirty)
+             {
+                 if (string.IsNullOrWhiteSpace(loggedInUser.Id))
+                 {
+                     await userData.CreateUser(loggedInUser);
+                 }
+                 else
+                 {
+                     await userData.UpdateUser(loggedInUser);
+                 }
+             }
+         }
+     }
+}
