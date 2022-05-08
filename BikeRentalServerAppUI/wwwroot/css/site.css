@@ -13,7 +13,7 @@ html, body {
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
-    color: #FFFFFF;
+    color: #EFEAD8;
 }
 
 body {
@@ -22,6 +22,12 @@ body {
     background-size: cover;
     padding: 0;
     margin: 0;
+}
+
+main {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
 }
 
 .container-fluid{
@@ -56,14 +62,51 @@ body {
     font-size: 1.5rem;
 }
 
-.primary-button {
+.landing-nav .primary-button {
     background-color: #FFFFFF;
     color: #1c1c1c;
+    margin-bottom: 1rem;
 }
 
-.secondary-button {
+.landing-nav .secondary-button {
     color: #FFFFFF;
 }
+
+.navbar, .nav-item {
+    background-color: rgba(0,0,0,0.6);
+}
+
+.navbar-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    color: #EFEAD8;
+}
+
+.navbar-dark .navbar-toggler {
+    margin-right: 0.5rem;
+    border: 0;
+    font-size: 1.5rem;
+}
+.navbar-dark .navbar-toggler-icon {
+    background-image: url(../images/menu.png);
+}
+
+.nav-link {
+    color: #EFEAD8;
+}
+
+.wrapper {
+    background-color: rgba(0,0,0,0.6);
+    display: flex;
+    flex: 1 1 auto;
+}
+.main-content {
+    flex: 1 1 auto;
+    background-color: #FFFFFF;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
 /*Blazor boilerplate styles*/
 h1:focus {
     outline: none;
@@ -80,8 +123,7 @@ a, .btn-link {
 }
 
 .content {
-    padding: 0;
-    height: 100%;
+    flex: 1 1 auto;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -124,4 +166,3 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
-    
