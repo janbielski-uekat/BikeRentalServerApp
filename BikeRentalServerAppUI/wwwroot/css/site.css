@@ -13,7 +13,7 @@ html, body {
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
-    color: #EFEAD8;
+    color: #2e2e2d;
 }
 
 body {
@@ -100,11 +100,38 @@ main {
     display: flex;
     flex: 1 1 auto;
 }
-.main-content {
-    flex: 1 1 auto;
+.main-content {    
     background-color: #FFFFFF;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+}
+
+.types-section-header{
+    padding: 0.75rem
+}
+
+.section-header p, h2 {
+    text-align: center;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.type-entry{
+     margin-bottom: 0.5rem;
+}
+
+.type-title h3 {
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.type-image{
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.type-description {
+    text-align: center;
 }
 
 /*Blazor boilerplate styles*/

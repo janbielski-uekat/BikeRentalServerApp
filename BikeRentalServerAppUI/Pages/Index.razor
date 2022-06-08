@@ -1,11 +1,13 @@
 ﻿@page "/"
 @inject IUserData userData
+@inject ITypeData typeData
 @inject AuthenticationStateProvider authProvider
 @attribute [Authorize]
 <PageTitle>Index</PageTitle>
 
 <div class="container-fluid wrapper">
     <div class="main-content">
+
         @if(loggedInUser is null)
         {
             <p>Loadning...</p>
@@ -13,17 +15,49 @@
         else
         {
          <p>You have been logged in as @loggedInUser.FirstName @loggedInUser.LastName.</p>   
-        }        
+        }
+
+        @if(types is not null)
+        { 
+            <div class="row section-header">                
+                <h2>About Us</h2>
+                <p>We are a local company that provides bike rental services. We operate in the area of polish seaside.</p>
+            </div> 
+            <div class="row section-header">                
+                <h2>Our Bikes</h2>
+                <p>You can choose from a variety of bikes, depending on what you need. All available options are listed below.</p>
+            </div>            
+            <Virtualize Items="@types" Context="t" OverscanCount="5">
+                <div class="row type-entry">                
+                    <div class="row type-title">
+                        <h3>@t.Name</h3>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-6">
+                            <img class="img-fluid type-image" src="/Images/@t.PictureName" alt="@t.Name">
+                        </div>                        
+                    </div>
+                    <div class="row justify-content-center type-description">
+                        <div class="col-10">
+                            <p>@t.Description</p> 
+                            <p><b>Price:</b> @t.Price zł/h</p>
+                        </div>                        
+                    </div>                                    
+                </div>
+            </Virtualize>
+        }
     </div>    
 </div>
 
 @code{
     private UserModel loggedInUser;
+    private List<TypeModel> types;
 
     protected async override Task OnInitializedAsync()
     {
         await LoadAndVerifyUser();
         loggedInUser = await authProvider.GetUserFromAuth(userData);
+        types = await typeData.GetAllTypes();
     }
 
     private async Task LoadAndVerifyUser()
