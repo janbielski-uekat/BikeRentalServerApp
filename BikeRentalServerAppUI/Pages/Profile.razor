@@ -1,0 +1,37 @@
+﻿@page "/Profile"
+@inject IUserData userData
+@inject AuthenticationStateProvider authProvider
+@attribute [Authorize]
+
+<div class="container-fluid wrapper">
+    <div class="main-content">
+        @if(loggedInUser is null)
+        {
+            <p>Loadning...</p>
+        }
+        else
+        {
+            <div class="row section-header">                
+                <h2>Your Profile</h2>
+            </div>
+            <div class="row profile-info">
+                <p><b>First Name:</b> @loggedInUser.FirstName </p>
+                <p><b>Last Name:</b> @loggedInUser.LastName </p>
+                <p><b>E-Mail Address:</b> @loggedInUser.EmailAddress </p>
+            </div>
+            <div class="row justify-content-center edit-profile">
+                <a class="btn btn-secondary" href="/MicrosoftIdentity/Account/EditProfile">
+                    Edit Profile
+                </a>
+            </div>
+        }
+    </div>
+</div>
+@code {
+    private UserModel loggedInUser;
+
+    protected async override Task OnInitializedAsync()
+    {
+        loggedInUser = await authProvider.GetUserFromAuth(userData);
+    }
+}

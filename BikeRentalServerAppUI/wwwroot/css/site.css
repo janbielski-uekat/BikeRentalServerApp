@@ -116,6 +116,7 @@ main {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     padding-top: 1rem;
+    width: 100%;
 }
 
 .types-section-header{
@@ -146,6 +147,14 @@ main {
     text-align: center;
 }
 
+.profile-info{
+    margin: 1.5rem;
+}
+
+.edit-profile a {
+    width: 80%;
+    background-color: #2e2e2d;
+}
 /*Blazor boilerplate styles*/
 h1:focus {
     outline: none;
