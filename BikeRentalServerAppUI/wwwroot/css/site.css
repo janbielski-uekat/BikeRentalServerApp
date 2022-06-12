@@ -151,8 +151,32 @@ main {
     margin: 1.5rem;
 }
 
-.edit-profile a {
+.edit-profile a, .book-now a {
     width: 80%;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    background-color: #2e2e2d;
+    margin-bottom: 2rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-label{
+    padding-top: 0.75rem;
+}
+
+.input-section{
+    margin-left: 1.5rem;
+    width: 80%;
+}
+
+.submit-button {
+    width: 80%;
+    margin: 2rem;
     background-color: #2e2e2d;
 }
 /*Blazor boilerplate styles*/

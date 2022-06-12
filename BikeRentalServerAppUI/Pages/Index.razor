@@ -2,21 +2,12 @@
 @inject IUserData userData
 @inject ITypeData typeData
 @inject AuthenticationStateProvider authProvider
+@inject NavigationManager navMenager
 @attribute [Authorize]
 <PageTitle>Index</PageTitle>
 
 <div class="container-fluid wrapper">
     <div class="main-content">
-
-        @if(loggedInUser is null)
-        {
-            <p>Loadning...</p>
-        }
-        else
-        {
-         <p>You have been logged in as @loggedInUser.FirstName @loggedInUser.LastName.</p>   
-        }
-
         @if(types is not null)
         { 
             <div class="row section-header">                
@@ -46,6 +37,11 @@
                 </div>
             </Virtualize>
         }
+        <div class="row justify-content-center book-now">
+            <a class="btn btn-secondary" href="/Book">
+                Book Now
+            </a>
+        </div>
     </div>    
 </div>
 

@@ -1,0 +1,108 @@
+﻿@page "/Book"
+@using BikeRentalServerAppUI.Models
+@inject AuthenticationStateProvider authProvider
+@inject NavigationManager navMenager
+@inject ITypeData typeData
+@inject IBookingData bookingData
+@inject IStationData stationData
+@inject IUserData userData
+@attribute [Authorize]
+
+<div class="container-fluid wrapper">
+    <div class="main-content">
+        @if(loggedInUser is null && types is null && stations is null)
+        {
+            <p>Loadning...</p>
+        }
+        else
+        {   
+            <div class="row section-header">                
+                <h2>New Booking</h2>
+            </div>
+            <div class="row form-container">
+                <EditForm Model="newBooking" OnValidSubmit="CreateBooking" >
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="row input-section">
+                        <label class="form-label fw-bold text-uppercase" for="start-date">Start Date</label>
+                        <InputDate class="form-control" id="start-date" @bind-Value="newBooking.StartDate" />
+                    </div>
+                    <div class="input-section">
+                        <label class="form-label fw-bold text-uppercase" for="end-date">End Date</label>
+                        <InputDate class="form-control" id="end-date" @bind-Value="newBooking.EndDate" />
+                    </div>
+                    <div class="row input-section">
+                        <label class="form-label fw-bold text-uppercase" for="start-station">Start Station</label>
+                        <InputSelect class="form-control" id="start-station" @bind-Value="newBooking.StartStationId">
+                            <option value="" disabled selected>Select start station</option>
+                            @foreach (var station in stations)
+                            {
+                                <option value="@station.Id">@station.Name</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="row input-section">
+                        <label class="form-label fw-bold text-uppercase" for="end-station">End Station</label>
+                        <InputSelect class="form-control" id="end-station" @bind-Value="newBooking.EndStationId">
+                            <option value="" disabled selected>Select end station</option>
+                            @foreach (var station in stations)
+                            {
+                                <option value="@station.Id">@station.Name</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="row input-section">
+                        <label class="form-label fw-bold text-uppercase" for="bike-type">Bike Type</label>
+                        <InputSelect class="form-control" id="bike-type" @bind-Value="newBooking.BikeType">
+                            <option value="" disabled selected>Select bike type</option>
+                            @foreach (var type in types)
+                            {
+                                <option value="@type.Name">@type.Name</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="row justify-content-center center-children">
+                        <button class="btn btn-secondary text-uppercase submit-button" type="submit">Place Your booking</button>
+                    </div>
+                </EditForm>
+            </div>
+            
+        }
+    </div>
+</div>
+
+@code {
+    private NewBookingModel newBooking = new();
+    private UserModel loggedInUser;
+    private List<TypeModel> types;
+    private List<StationModel> stations;
+
+    protected async override Task OnInitializedAsync()
+    {
+        stations = await stationData.GetAllStations();
+        types = await typeData.GetAllTypes();
+        loggedInUser = await authProvider.GetUserFromAuth(userData);
+    }
+
+    private void ClosePage()
+    {
+        navMenager.NavigateTo("/");
+    }
+
+    private async Task CreateBooking()
+    {
+        BookingModel b = new();
+
+        b.Renter = new BasicUserModel(loggedInUser);
+        b.StartDate = newBooking.StartDate;
+        b.EndDate = newBooking.EndDate;
+        b.StartStationId = newBooking.StartStationId;
+        b.EndStationId = newBooking.EndStationId;
+        b.BikeType = newBooking.BikeType;
+
+        await bookingData.CreateBooking(b);
+        newBooking = new();
+
+        ClosePage();
+    }
+}

@@ -26,7 +26,19 @@ public class MongoTypeData : ITypeData
 
 		return output;
 	}
+	public async Task<Dictionary<TypeModel, int>> GetOrderDictionary()
+	{
+		var types = await _types.FindAsync(_ => true);
+		var typesList = types.ToList();
+		Dictionary<TypeModel, int> result = new Dictionary<TypeModel, int>();
 
+		foreach (var type in typesList)
+		{
+			result.Add(type, 0);
+		}
+		
+		return result;
+	}
 	public Task CreateType(TypeModel type)
 	{
 		return _types.InsertOneAsync(type);
